@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="array_values">
+        <item name="popular">popular</item>
+        <item name="top_rated">Toprated</item>
+    </string-array>
+
+</resources>

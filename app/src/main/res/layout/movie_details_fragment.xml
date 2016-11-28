@@ -1,0 +1,161 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.eslam.finalmovies.MovieDetails">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/movie_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#3F51B5"
+            android:elevation="10dp"
+            android:paddingBottom="50dp"
+            android:paddingLeft="15dp"
+            android:textColor="#ffffff"
+            android:paddingTop="20dp"
+            android:text="@string/header"
+            android:textSize="30sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#53b6fc"
+
+            >
+
+        </View>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/detail_image"
+                android:layout_width="150dp"
+                android:layout_height="200dp"
+                android:elevation="5dp"
+                android:scaleType="fitXY"
+                android:src="@mipmap/ic_launcher" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="2016"
+                    android:textSize="40sp" />
+
+                <TextView
+                    android:id="@+id/Popularity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="Popularity \n 07.3"
+                    android:textSize="30sp" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/vote"
+                    android:textSize="30sp"
+                    android:text="10"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="73dp"
+                    android:text="/10"
+                    android:textSize="40sp"/>
+
+                    <ImageView
+                        android:layout_width="66dp"
+                        android:layout_height="match_parent"
+                        android:id="@+id/fav_btn"
+                        android:layout_alignParentRight="true" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+            <RelativeLayout
+                android:layout_width="55dp"
+                android:layout_height="50dp">
+
+            </RelativeLayout>
+
+
+            </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#53b6fc"
+
+            >
+
+        </View>
+
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+            android:textSize="20sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#53b6fc"
+
+            >
+
+        </View>
+
+        <ListView
+            android:textSize="30sp"
+            android:text="Trailers"
+            android:id="@+id/trailer_names"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:drawableLeft="@android:drawable/ic_media_play"
+            android:drawablePadding="5dp"
+            android:drawableStart="@android:drawable/ic_media_play"
+            android:gravity="center" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#53b6fc"
+
+            >
+
+        </View>
+
+        <ListView
+            android:textSize="5sp"
+            android:id="@+id/review_names"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawablePadding="5dp"
+            android:gravity="center" />
+
+    </LinearLayout>
+</ScrollView>
