@@ -11,7 +11,10 @@ public class Apple extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        ana=this;
+        ana = this;
     }
-    public static Apple getana(){return ana;}
+
+    public static Apple getana() {
+        return ana;
+    }
 }

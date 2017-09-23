@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
+    private boolean networkStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         checkNetworkAvailable();
-        if(networkStatus == true) {
+        if (networkStatus) {
 
             if (!isTablet(getApplicationContext())) {
                 Fragment f = new MainFragment();
@@ -40,26 +41,17 @@ public class MainActivity extends AppCompatActivity {
                 fragmentTransaction.replace(R.id.fragment_movies2, f);
                 fragmentTransaction.commit();
             }
-        }
-        else{
+        } else {
 
             Toast.makeText(this, "Your Network is Not Available", Toast.LENGTH_LONG).show();
         }
 
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        System.exit(0);
-//        this.finish();
-//
-//    }
-
-
     @Override
     protected void onResume() {
 
-        if(networkStatus != true) {
+        if (!networkStatus) {
 
             Toast.makeText(this, "Your Network is Not Available", Toast.LENGTH_LONG).show();
         }
@@ -73,31 +65,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.menu_details,menu);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_details, menu);
         return true;
-
     }
-
-
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
+    public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if(id == R.id.action_settings){
-            Intent opIntent = new Intent(this,SettingsActivity.class);
+        if (id == R.id.action_settings) {
+            Intent opIntent = new Intent(this, SettingsActivity.class);
             startActivity(opIntent);
             return true;
 
-        }
-        else if (id==R.id.action_Fav){
-            if(!isTablet(getApplicationContext())) {
-                Intent intent = new Intent(this,FavList.class);
+        } else if (id == R.id.action_Fav) {
+            if (!isTablet(getApplicationContext())) {
+                Intent intent = new Intent(this, FavList.class);
                 startActivity(intent);
                 return true;
-            }
-            else
-            {
+            } else {
                 Fragment f = new FavListFragment();
                 FragmentManager fm = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fm.beginTransaction();
@@ -115,20 +101,20 @@ public class MainActivity extends AppCompatActivity {
                 & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE);
         return (xlarge || large);
     }
-    private boolean networkStatus;
+
     private void checkNetworkAvailable() {
         networkStatus = false;
-        try{
+        try {
             ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo netInfo = cm.getNetworkInfo(0);
-            if (netInfo != null && netInfo.getState()==NetworkInfo.State.CONNECTED) {
+            if (netInfo != null && netInfo.getState() == NetworkInfo.State.CONNECTED) {
                 networkStatus = true;
-            }else {
+            } else {
                 netInfo = cm.getNetworkInfo(1);
-                if(netInfo!=null && netInfo.getState()==NetworkInfo.State.CONNECTED)
+                if (netInfo != null && netInfo.getState() == NetworkInfo.State.CONNECTED)
                     networkStatus = true;
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             networkStatus = false;
         }

@@ -40,17 +40,15 @@ import java.util.ArrayList;
 public class MovieDetailsFragment extends Fragment {
 
     private View view;
-
+    Movie movieIntent;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.movie_details_fragment, container, false);
 
-
-        final Movie movieIntent;
-        if(!isTablet(getContext()))
-            movieIntent   = (Movie) getActivity().getIntent().getExtras().getSerializable("Mov");
+        if (!isTablet(getContext()))
+            movieIntent = (Movie) getActivity().getIntent().getExtras().getSerializable("Mov");
         else
             movieIntent = (Movie) getArguments().getSerializable("Mov");
         final ImageView imageView = (ImageView) view.findViewById(R.id.fav_btn);
@@ -59,7 +57,6 @@ public class MovieDetailsFragment extends Fragment {
             imageView.setImageResource(R.drawable.un_fav);
         else
             imageView.setImageResource(R.drawable.fav);
-
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,29 +76,21 @@ public class MovieDetailsFragment extends Fragment {
         String urlV = new String("http://api.themoviedb.org/3/movie/" + movieIntent.getIDI() + "/videos?sort_by=popularity.desc&api_key=26f93e16f5f1dadf6c0c3c17462efcc6");
         try {
             URL url1 = new URL(urlV);
-            if(savedInstanceState==null)
+            if (savedInstanceState == null)
                 ddb.execute(url1);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-
-
         SyncR ddR = new SyncR();
         String urlR = new String("http://api.themoviedb.org/3/movie/" + movieIntent.getIDI() + "/reviews?sort_by=popularity.desc&api_key=26f93e16f5f1dadf6c0c3c17462efcc6");
-        try{
+        try {
             URL url2 = new URL(urlR);
-            if(savedInstanceState==null)
+            if (savedInstanceState == null)
                 ddR.execute(url2);
-        } catch (MalformedURLException e){
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-
-
-
-
         //urll = new String("http://api.themoviedb.org/3/movie/" + movieIntent.getIDI() + "/videos?sort_by=popularity.desc&api_key=26f93e16f5f1dadf6c0c3c17462efcc6");
-
-
         if (movieIntent != null) {
             //Title
             TextView title = (TextView) view.findViewById(R.id.movie_title);
@@ -132,22 +121,13 @@ public class MovieDetailsFragment extends Fragment {
         } else {
             Toast.makeText(getActivity(), "ERROR", Toast.LENGTH_LONG).show();
         }
-
-
-
         return view;
     }
-
-
 
     public boolean isTablet(Context context) {
         boolean xlarge = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_XLARGE);
         boolean large = ((context.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE);
         return (xlarge || large);
-    }
-
-    public void fetchData() {
-
     }
 
     @Override
@@ -157,50 +137,39 @@ public class MovieDetailsFragment extends Fragment {
 
     public void updateV(ArrayList<String> list) {
         ListView listView = (ListView) view.findViewById(R.id.trailer_names);
-            listView.setAdapter(new TrailerAdapter(getActivity(), list));
+        listView.setAdapter(new TrailerAdapter(getActivity(), list));
 
     }
 
     public void updateR(ArrayList<String> list) {
 
         ListView listView1 = (ListView) view.findViewById(R.id.review_names);
-        listView1.setAdapter(new ReviewsAdapter(getContext(),list));
-
-
+        listView1.setAdapter(new ReviewsAdapter(getContext(), list));
     }
 
     public class SyncDb extends AsyncTask<URL, Void, ArrayList<String>> {
-
-
         @Override
         protected ArrayList<String> doInBackground(URL... paramas) {
 
-
-//            URL url = createURL(paramas[0]);
             String json = URLResult(paramas[0]);
             ArrayList<String> movies = jsonParser(json);
 
             return movies;
-
-
         }
-
 
         @Override
         protected void onPostExecute(ArrayList<String> list) {
             super.onPostExecute(list);
 
             updateV(list);
-
         }
-
 
         private String URLResult(URL webAddress) {
             InputStream inputStream = null;
             String json = null;
             try {
                 //URL url = new URL(webAddress);
-                if(webAddress != null) {
+                if (webAddress != null) {
                     HttpURLConnection connection = (HttpURLConnection) webAddress.openConnection();
                     connection.setRequestMethod("GET");
                     connection.connect();
@@ -215,7 +184,6 @@ public class MovieDetailsFragment extends Fragment {
             return json;
         }
 
-
         private String readFromStream(InputStream inputStream) throws IOException {
             StringBuilder output = new StringBuilder();
             if (inputStream != null) {
@@ -228,16 +196,6 @@ public class MovieDetailsFragment extends Fragment {
                 }
             }
             return output.toString();
-        }
-
-        private URL createURL(String S) {
-            URL url = null;
-            try {
-                url = new URL(S);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-            return url;
         }
 
         private ArrayList<String> jsonParser(String s) {
@@ -257,7 +215,6 @@ public class MovieDetailsFragment extends Fragment {
             return movies;
         }
 
-
     }
 
     public class SyncR extends AsyncTask<URL, Void, ArrayList<String>> {
@@ -265,33 +222,24 @@ public class MovieDetailsFragment extends Fragment {
 
         @Override
         protected ArrayList<String> doInBackground(URL... paramas) {
-
-
 //            URL url = createURL(paramas[0]);
             String json = URLResult(paramas[0]);
             ArrayList<String> movies = jsonParser(json);
 
             return movies;
-
-
         }
-
 
         @Override
         protected void onPostExecute(ArrayList<String> list) {
             super.onPostExecute(list);
             updateR(list);
-
         }
-
-
 
         private String URLResult(URL webAddress) {
             InputStream inputStream = null;
             String json = null;
             try {
-                //URL url = new URL(webAddress);
-                if(webAddress != null) {
+                if (webAddress != null) {
                     HttpURLConnection connection = (HttpURLConnection) webAddress.openConnection();
                     connection.setRequestMethod("GET");
                     connection.connect();
@@ -306,7 +254,6 @@ public class MovieDetailsFragment extends Fragment {
             return json;
         }
 
-
         private String readFromStream(InputStream inputStream) throws IOException {
             StringBuilder output = new StringBuilder();
             if (inputStream != null) {
@@ -319,16 +266,6 @@ public class MovieDetailsFragment extends Fragment {
                 }
             }
             return output.toString();
-        }
-
-        private URL createURL(String S) {
-            URL url = null;
-            try {
-                url = new URL(S);
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            }
-            return url;
         }
 
         private ArrayList<String> jsonParser(String s) {
@@ -347,7 +284,6 @@ public class MovieDetailsFragment extends Fragment {
             }
             return movies;
         }
-
 
     }
 }

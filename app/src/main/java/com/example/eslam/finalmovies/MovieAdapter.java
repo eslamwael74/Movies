@@ -8,8 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+
 import java.util.ArrayList;
+
 import com.squareup.picasso.Picasso;
+
 import android.view.LayoutInflater;
 
 
@@ -18,8 +21,8 @@ import android.view.LayoutInflater;
  */
 
 public class MovieAdapter extends ArrayAdapter<Movie> {
+
     private Context context;
-    ArrayList<Movie> listOfMovie;
     public static final String URL_IMAGES = "http://image.tmdb.org/t/p/w185/";
 
     public MovieAdapter(Context context, ArrayList<Movie> objects) {
@@ -44,7 +47,6 @@ public class MovieAdapter extends ArrayAdapter<Movie> {
 
         return convertView;
     }
-
 
 
 }

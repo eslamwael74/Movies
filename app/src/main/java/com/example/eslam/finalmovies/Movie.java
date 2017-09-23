@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * Created by eslam on 10/17/2016.
  */
 
-public class Movie implements Serializable  {
+public class Movie implements Serializable {
     private int ID;
     private String title;
     private String date;
@@ -23,8 +23,8 @@ public class Movie implements Serializable  {
 
     public Movie(int ID, String date, String description, String picture, double popularity, String title, int vote, boolean isFav, int IDI) {
         this.date = date;
-        this.isFav=isFav;
-        this.IDI=IDI;
+        this.isFav = isFav;
+        this.IDI = IDI;
         this.description = description;
         this.picture = picture;
         this.popularity = popularity;
@@ -33,7 +33,8 @@ public class Movie implements Serializable  {
         this.ID = ID;
     }
 
-    public Movie(){}
+    public Movie() {
+    }
 
     public void setID(int ID) {
         this.ID = ID;
@@ -91,14 +92,14 @@ public class Movie implements Serializable  {
         this.description = description;
     }
 
-    public boolean isFav()
-    {
+    public boolean isFav() {
         return isFav;
     }
+
     public boolean isFavD() {
-        ArrayList<Movie>movies=db.getInstance().getFav();
-        for (int i = 0 ; i < movies.size();i++) {
-            if(movies.get(i).getPicture().equals(getPicture()))
+        ArrayList<Movie> movies = db.getInstance().getFav();
+        for (int i = 0; i < movies.size(); i++) {
+            if (movies.get(i).getPicture().equals(getPicture()))
                 return true;
             setFav(true);
         }
@@ -109,12 +110,13 @@ public class Movie implements Serializable  {
         isFav = fav;
     }
 
-    public int getIDI() {return IDI;}
+    public int getIDI() {
+        return IDI;
+    }
 
     public void setIDI(int IDI) {
         this.IDI = IDI;
     }
-
 
 
 }

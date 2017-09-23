@@ -20,21 +20,23 @@ import java.util.ArrayList;
  * Created by eslam on 11/25/2016.
  */
 
-public class FavListFragment extends Fragment{
+public class FavListFragment extends Fragment {
 
     GridView gridView;
     public View view;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.fragment_fav,container,false);
-        gridView=(GridView) view.findViewById(R.id.gridview_fav);
-        if(savedInstanceState ==null) {
+        view = inflater.inflate(R.layout.fragment_fav, container, false);
+        gridView = (GridView) view.findViewById(R.id.gridview_fav);
+        if (savedInstanceState == null) {
 
             updateFav(db.getInstance().getFav());
         }
         return view;
     }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -43,11 +45,10 @@ public class FavListFragment extends Fragment{
 
 
     @Nullable
-    public void updateFav (final ArrayList<Movie> movies) {
+    public void updateFav(final ArrayList<Movie> movies) {
 
         MovieAdapter adapter = new MovieAdapter(getActivity(), movies);
-  //      gridView.getCount();
-//        gridView.getItemAtPosition(1);
+
         gridView.setAdapter(adapter);
 
         if (!isTablet(getActivity())) {
@@ -80,8 +81,6 @@ public class FavListFragment extends Fragment{
 
                 }
             });
-
-
         }
     }
 
@@ -92,9 +91,6 @@ public class FavListFragment extends Fragment{
                 & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE);
         return (xlarge || large);
     }
-
-
-
 
 }
 

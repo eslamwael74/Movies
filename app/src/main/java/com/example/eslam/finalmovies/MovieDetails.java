@@ -51,22 +51,22 @@ import java.util.ArrayList;
 
 public class MovieDetails extends AppCompatActivity {
 
-  @Override
+    private boolean networkStatus = false;
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.movie_details);
-
-        final Movie movieIntent = (Movie) getIntent().getExtras().getSerializable("Mov");
+//        final Movie movieIntent = (Movie) getIntent().getExtras().getSerializable("Mov");
 
         checkNetworkAvailable();
-        if(networkStatus == true) {
+        if (networkStatus) {
             Fragment f = new MovieDetailsFragment();
             FragmentManager fm = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fm.beginTransaction();
             fragmentTransaction.replace(R.id.details_fragment_movies, f);
             fragmentTransaction.commit();
-        }
-        else{
+        } else {
 
             Toast.makeText(this, "Your Network is Not Available", Toast.LENGTH_LONG).show();
             Fragment f = new MovieDetailsFragment();
@@ -76,82 +76,34 @@ public class MovieDetails extends AppCompatActivity {
             fragmentTransaction.commit();
 
         }
-
-
-
-//         ActionBar actionBar = getSupportActionBar();
-//         actionBar.setDisplayOptions(actionBar.getDisplayOptions()
-//                 | ActionBar.DISPLAY_SHOW_CUSTOM);
-
-//         ActionBar.LayoutParams layoutParams = new ActionBar.LayoutParams(
-//                 ActionBar.LayoutParams.WRAP_CONTENT,
-//                 ActionBar.LayoutParams.WRAP_CONTENT, Gravity.RIGHT
-//                 | Gravity.CENTER_VERTICAL);
-//         layoutParams.rightMargin = 40;
-//         imageView.setLayoutParams(layoutParams);
-//         actionBar.setCustomView(imageView)
-
     }
+
     @Override
     protected void onResume() {
 
-        if(networkStatus != true) {
+        if (!networkStatus) {
 
             Toast.makeText(this, "Your Network is Not Available", Toast.LENGTH_LONG).show();
         }
         super.onResume();
-
     }
-    private boolean networkStatus;
+
     private void checkNetworkAvailable() {
         networkStatus = false;
-        try{
+        try {
             ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo netInfo = cm.getNetworkInfo(0);
-            if (netInfo != null && netInfo.getState()==NetworkInfo.State.CONNECTED) {
+            if (netInfo != null && netInfo.getState() == NetworkInfo.State.CONNECTED) {
                 networkStatus = true;
-            }else {
+            } else {
                 netInfo = cm.getNetworkInfo(1);
-                if(netInfo!=null && netInfo.getState()==NetworkInfo.State.CONNECTED)
+                if (netInfo != null && netInfo.getState() == NetworkInfo.State.CONNECTED)
                     networkStatus = true;
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             networkStatus = false;
         }
     }
-//
-//    @Override
-//    public void onBackPressed() {
-//
-//        if(!isTablet(getApplicationContext())) {
-//            Intent intent = new Intent(this,MainActivity.class);
-//            startActivity(intent);
-//
-//        }
-//        else
-//        {
-//            Fragment f = new FavListFragment();
-//            FragmentManager fm = getSupportFragmentManager();
-//            FragmentTransaction fragmentTransaction = fm.beginTransaction();
-//            fragmentTransaction.replace(R.id.fragment_movies2, f);
-//            fragmentTransaction.commit();
-//        }
-//    }
-
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//    }
-
-    public boolean isTablet(Context context) {
-        boolean xlarge = ((context.getResources().getConfiguration().screenLayout
-                & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_XLARGE);
-        boolean large = ((context.getResources().getConfiguration().screenLayout
-                & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE);
-        return (xlarge || large);
-    }
-
-
 
 }

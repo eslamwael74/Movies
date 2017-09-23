@@ -39,75 +39,72 @@ import java.util.ArrayList;
  * Created by eslam on 11/21/2016.
  */
 
-public class MainFragment extends Fragment{
+public class MainFragment extends Fragment {
 
     static String TAG = "Movie Results";
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_main,container,false);
-        if(savedInstanceState ==null) {
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
+
+        if (savedInstanceState == null) {
             SyncDb syncdb = new SyncDb();
             syncdb.execute();
         }
         return view;
     }
 
-
     @Nullable
-    private void update (final ArrayList<Movie>movies){
+    private void update(final ArrayList<Movie> movies) {
         GridView gridView = (GridView) getActivity().findViewById(R.id.gridview);
-        MovieAdapter adapter = new MovieAdapter(getContext(),movies);
+        MovieAdapter adapter = new MovieAdapter(getContext(), movies);
         gridView.setAdapter(adapter);
-       if (!isTablet(getContext())) {
-           gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-               @Override
-               public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                   Intent intent = new Intent(getActivity(), MovieDetails.class);
-                   Bundle bundle = new Bundle();
-                   bundle.putSerializable("Mov", movies.get(i));
-                   intent.putExtras(bundle);
-                   startActivity(intent);
-               }
+        if (!isTablet(getContext())) {
+            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Intent intent = new Intent(getActivity(), MovieDetails.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("Mov", movies.get(i));
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
 
-           });
-       }
-        else
-       {
-           gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-               @Override
-               public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                   Fragment f = new MovieDetailsFragment();
-                   Bundle bundle = new Bundle( );
-                   bundle.putSerializable("Mov",movies.get(position));
-                   f.setArguments(bundle);
-                   FragmentManager fm = getActivity().getSupportFragmentManager();
-                   FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                   fragmentTransaction.replace(R.id.fragment_Det,f);
-                   fragmentTransaction.commit();
-               }
-           });
-       }
+            });
+        } else {
+            gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Fragment f = new MovieDetailsFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("Mov", movies.get(position));
+                    f.setArguments(bundle);
+                    FragmentManager fm = getActivity().getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment_Det, f);
+                    fragmentTransaction.commit();
+                }
+            });
+        }
     }
 
     @Override
     public void onResume() {
 //        Toast.makeText(getActivity(),"Data Submit Successfully", Toast.LENGTH_LONG).show();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String order = prefs.getString("PREF_LIST","popular");
-        if(!order.equals(TAG))
-        {
+        String order = prefs.getString("PREF_LIST", "popular");
+        if (!order.equals(TAG)) {
             SyncDb db = new SyncDb();
             db.execute();
         }
         super.onResume();
     }
 
-    public class SyncDb extends AsyncTask<URL,Void ,ArrayList<Movie> > {
-        public final String urll="http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=26f93e16f5f1dadf6c0c3c17462efcc6" ;
-        public final String urllTV="http://api.themoviedb.org/3/discover/movie?sort_by=vote_average.desc&api_key=26f93e16f5f1dadf6c0c3c17462efcc6" ;
-
+    public class SyncDb extends AsyncTask<URL, Void, ArrayList<Movie>> {
+        public final String urll = "http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=26f93e16f5f1dadf6c0c3c17462efcc6";
+        public final String urllTV = "http://api.themoviedb.org/3/discover/movie?sort_by=vote_average.desc&api_key=26f93e16f5f1dadf6c0c3c17462efcc6";
 
 
         @Override
@@ -115,21 +112,20 @@ public class MainFragment extends Fragment{
 
 
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            String order = prefs.getString("PREF_LIST","popular");
+            String order = prefs.getString("PREF_LIST", "popular");
 
-            if(order.equals("popular")){
+            if (order.equals("popular")) {
                 URL url = createURL(urll);
-                String json  = URLResult(url);
+                String json = URLResult(url);
                 ArrayList<Movie> movies = jsonParser(json);
                 TAG = "popular";
                 return movies;
 
-            }
-            else{
-                URL url = createURL(urllTV );
-                String json  = URLResult(url);
+            } else {
+                URL url = createURL(urllTV);
+                String json = URLResult(url);
                 ArrayList<Movie> movies = jsonParser(json);
-                TAG="top_rated";
+                TAG = "top_rated";
                 return movies;
             }
 
@@ -144,7 +140,7 @@ public class MainFragment extends Fragment{
         }
 
 
-       private String URLResult(URL webAddress) {
+        private String URLResult(URL webAddress) {
             InputStream inputStream = null;
             String json = null;
             try {
@@ -189,7 +185,7 @@ public class MainFragment extends Fragment{
         }
 
         private ArrayList<Movie> jsonParser(String s) {
-            ArrayList<Movie> movies=new ArrayList<>();
+            ArrayList<Movie> movies = new ArrayList<>();
             try {
 
                 JSONObject mObject = new JSONObject(s);
@@ -198,10 +194,10 @@ public class MainFragment extends Fragment{
                     JSONObject indexObject = resultsArray.getJSONObject(i);
                     Movie indexMovie = new Movie(indexObject.getInt("id"),
                             indexObject.getString("release_date"),
-                            indexObject.getString("overview"),indexObject.getString("poster_path"),
+                            indexObject.getString("overview"), indexObject.getString("poster_path"),
                             indexObject.getDouble("popularity"),
                             indexObject.getString("title"),
-                            indexObject.getInt("vote_average"),false,indexObject.getInt("id"));
+                            indexObject.getInt("vote_average"), false, indexObject.getInt("id"));
 
                     movies.add(indexMovie); // Add each item to the list
 

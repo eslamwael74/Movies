@@ -10,7 +10,7 @@ import android.support.v7.app.ActionBarActivity;
 public class SettingsActivity extends ActionBarActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstantceState){
+    protected void onCreate(Bundle savedInstantceState) {
         super.onCreate(savedInstantceState);
         setContentView(R.layout.activity_pref);
         getFragmentManager().beginTransaction().replace(R.id.framee,

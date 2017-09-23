@@ -14,19 +14,21 @@ public class db {
     private static MoviesDbHelper dpH;
     private SQLiteDatabase SQ_db;
     private static db instance;
-    public static db getInstance()
-    {
-        if(instance==null) {
+
+    public static db getInstance() {
+        if (instance == null) {
             instance = new db();
-            dpH =new MoviesDbHelper(new Apple().getana().getApplicationContext());
+            dpH = new MoviesDbHelper(new Apple().getana().getApplicationContext());
             instance.open();
         }
         return instance;
     }
-    private db(){}
-    private void open()
-    {
-        SQ_db= dpH.getWritableDatabase();
+
+    private db() {
+    }
+
+    private void open() {
+        SQ_db = dpH.getWritableDatabase();
     }
 
     private ContentValues getContentFromFlickerModel(Movie Model) {
@@ -34,7 +36,7 @@ public class db {
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(MoviesDbHelper.MoviedbEntery.COLUMN_ID, Model.getID());
-        contentValues.put(MoviesDbHelper.MoviedbEntery.COLUMN_TITLE , Model.getTitle());
+        contentValues.put(MoviesDbHelper.MoviedbEntery.COLUMN_TITLE, Model.getTitle());
         contentValues.put(MoviesDbHelper.MoviedbEntery.DISC, Model.getDescription());
         contentValues.put(MoviesDbHelper.MoviedbEntery.COLUMN_RATING, Model.getVote());
         contentValues.put(MoviesDbHelper.MoviedbEntery.COLUMN_POSTER_URL, Model.getPicture());
@@ -47,8 +49,7 @@ public class db {
 
     }
 
-
-    private Movie getMovieFromCursor(Cursor cursor){
+    private Movie getMovieFromCursor(Cursor cursor) {
         Movie movie = new Movie();
         movie.setID(cursor.getInt(cursor.getColumnIndex(MoviesDbHelper.MoviedbEntery.COLUMN_ID)));
         movie.setDescription(cursor.getString(cursor.getColumnIndex(MoviesDbHelper.MoviedbEntery.DISC)));
@@ -61,16 +62,15 @@ public class db {
         return movie;
     }
 
-
     public void removeMovie(Movie movie) {
-        SQ_db.delete(MoviesDbHelper.MoviedbEntery.TABLE_NAME,MoviesDbHelper.MoviedbEntery.COLUMN_TITLE+"=?",
+        SQ_db.delete(MoviesDbHelper.MoviedbEntery.TABLE_NAME, MoviesDbHelper.MoviedbEntery.COLUMN_TITLE + "=?",
                 new String[]{String.valueOf(movie.getTitle())});
     }
 
     public ArrayList<Movie> getFav() {
         ArrayList<Movie> movs = new ArrayList<Movie>();
         Cursor cursor = SQ_db.query(MoviesDbHelper.MoviedbEntery.TABLE_NAME,
-                null,null,null, null, null, null);
+                null, null, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             Movie Model = getMovieFromCursor(cursor);
@@ -81,22 +81,19 @@ public class db {
         return movs;
     }
 
-    public void insertMovie(Movie modle)
-    {
+    public void insertMovie(Movie modle) {
         ContentValues contentValues = getContentFromFlickerModel(modle);
-        long id = SQ_db.insert(MoviesDbHelper.MoviedbEntery.TABLE_NAME,null,contentValues);
-        Cursor cursor=SQ_db.query(MoviesDbHelper.MoviedbEntery.TABLE_NAME,null
-                ,MoviesDbHelper.MoviedbEntery.COLUMN_ID+ " = " + id,null,null,null,null);
+        long id = SQ_db.insert(MoviesDbHelper.MoviedbEntery.TABLE_NAME, null, contentValues);
+        Cursor cursor = SQ_db.query(MoviesDbHelper.MoviedbEntery.TABLE_NAME, null
+                , MoviesDbHelper.MoviedbEntery.COLUMN_ID + " = " + id, null, null, null, null);
         //cursor.moveToFirst();
-        if(cursor != null && cursor.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()) {
             Movie movie = getMovieFromCursor(cursor);
             modle.setID(movie.getID());
             cursor.close();
         }
-
     }
    /* public void deleteMovies(){
         Databases.delete(MoviesDbHelper.MoviedbEntery.TABLE_NAME,null,null);
     }*/
-
 }
