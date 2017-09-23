@@ -91,6 +91,5 @@ public class FavListFragment extends Fragment {
                 & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE);
         return (xlarge || large);
     }
-
 }
 

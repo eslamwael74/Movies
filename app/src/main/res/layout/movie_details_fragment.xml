@@ -1,4 +1,4 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,7 +14,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#3F51B5"
-            android:elevation="10dp"
             android:paddingBottom="50dp"
             android:paddingLeft="15dp"
             android:textColor="#ffffff"
@@ -40,7 +39,7 @@
                 android:id="@+id/detail_image"
                 android:layout_width="150dp"
                 android:layout_height="200dp"
-                android:elevation="5dp"
+                android:contentDescription=""
                 android:scaleType="fitXY"
                 android:src="@mipmap/ic_launcher" />
 
@@ -85,6 +84,7 @@
                         android:layout_width="66dp"
                         android:layout_height="match_parent"
                         android:id="@+id/fav_btn"
+                        android:contentDescription=""
                         android:layout_alignParentRight="true" />
                 </LinearLayout>
 
@@ -158,4 +158,5 @@
             android:gravity="center" />
 
     </LinearLayout>
-</ScrollView>
+
+</android.support.v4.widget.NestedScrollView>
