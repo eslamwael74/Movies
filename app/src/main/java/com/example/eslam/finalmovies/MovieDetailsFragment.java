@@ -73,7 +73,7 @@ public class MovieDetailsFragment extends Fragment {
             }
         });
         SyncDb ddb = new SyncDb();
-        String urlV = new String("http://api.themoviedb.org/3/movie/" + movieIntent.getIDI() + "/videos?ssort_by=popular.desc&api_key=26f93e16f5f1dadf6c0c3c17462efcc6");
+        String urlV = new String("http://api.themoviedb.org/3/movie/" + movieIntent.getIDI() + "/videos?sort_by=popularity.desc&api_key=26f93e16f5f1dadf6c0c3c17462efcc6");
         try {
             URL url1 = new URL(urlV);
             if (savedInstanceState == null)
@@ -82,7 +82,7 @@ public class MovieDetailsFragment extends Fragment {
             e.printStackTrace();
         }
         SyncR ddR = new SyncR();
-        String urlR = new String("http://api.themoviedb.org/3/movie/" + movieIntent.getIDI() + "/reviews?sort_by=popular.desc&api_key=26f93e16f5f1dadf6c0c3c17462efcc6");
+        String urlR = new String("http://api.themoviedb.org/3/movie/" + movieIntent.getIDI() + "/reviews?sort_by=popularity.desc&api_key=26f93e16f5f1dadf6c0c3c17462efcc6");
         try {
             URL url2 = new URL(urlR);
             if (savedInstanceState == null)

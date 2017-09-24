@@ -102,8 +102,8 @@ public class MainFragment extends Fragment {
         super.onResume();
     }
     public class SyncDb extends AsyncTask<URL, Void, ArrayList<Movie>> {
-        public final String urll = "http://api.themoviedb.org/3/discover/movie?sort_by=popular.desc&api_key=26f93e16f5f1dadf6c0c3c17462efcc6";
-        public final String urllTV = "http://api.themoviedb.org/3/discover/movie?sort_by=top_rated.desc&api_key=26f93e16f5f1dadf6c0c3c17462efcc6";
+        public final String urll = "http://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=26f93e16f5f1dadf6c0c3c17462efcc6";
+        public final String urllTV = "http://api.themoviedb.org/3/discover/movie?sort_by=vote_average.desc&api_key=26f93e16f5f1dadf6c0c3c17462efcc6";
 
 
         @Override
