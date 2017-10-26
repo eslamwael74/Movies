@@ -27,22 +27,23 @@ public class MainActivity extends AppCompatActivity {
 
         checkNetworkAvailable();
         if (networkStatus) {
-
-            if (!isTablet(getApplicationContext())) {
-                Fragment f = new MainFragment();
-                FragmentManager fm = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_movies, f);
-                fragmentTransaction.commit();
-            } else {
-                Fragment f = new MainFragment();
-                FragmentManager fm = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_movies2, f);
-                fragmentTransaction.commit();
+            if (savedInstanceState == null) {
+                if (!isTablet(getApplicationContext())) {
+                    Fragment f = new MainFragment();
+                    FragmentManager fm = getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment_movies, f);
+                    fragmentTransaction.commit();
+                } else {
+                    Fragment f = new MainFragment();
+                    FragmentManager fm = getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                    fragmentTransaction.replace(R.id.fragment_movies2, f);
+                    fragmentTransaction.commit();
+                }
             }
-        } else {
 
+        } else {
             Toast.makeText(this, "Your Network is Not Available", Toast.LENGTH_LONG).show();
         }
 
@@ -57,6 +58,11 @@ public class MainActivity extends AppCompatActivity {
         }
         super.onResume();
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
     @Override

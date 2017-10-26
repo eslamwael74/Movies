@@ -88,6 +88,11 @@ public class MovieDetails extends AppCompatActivity {
         super.onResume();
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
     private void checkNetworkAvailable() {
         networkStatus = false;
         try {

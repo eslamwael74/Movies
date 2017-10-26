@@ -35,7 +35,7 @@ public class TrailerAdapter extends ArrayAdapter<String> {
         }
         TextView trailerText = (TextView) convertView.findViewById(R.id.trailer_name);
 
-        int x = position + 1;
+               int x = position + 1;
         trailerText.setText("Trailer : " + x);
         trailerText.setOnClickListener(new View.OnClickListener() {
             @Override

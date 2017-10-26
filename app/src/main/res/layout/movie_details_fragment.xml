@@ -1,7 +1,9 @@
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:saveEnabled="true"
     tools:context="com.example.eslam.finalmovies.MovieDetails">
 
     <LinearLayout
@@ -16,10 +18,11 @@
             android:background="#3F51B5"
             android:paddingBottom="50dp"
             android:paddingLeft="15dp"
-            android:textColor="#ffffff"
             android:paddingTop="20dp"
             android:text="@string/header"
+            android:textColor="#ffffff"
             android:textSize="30sp" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -64,28 +67,31 @@
                     android:gravity="center_horizontal"
                     android:text="Popularity \n 07.3"
                     android:textSize="30sp" />
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/vote"
-                    android:textSize="30sp"
-                    android:text="10"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="73dp"
-                    android:text="/10"
-                    android:textSize="40sp"/>
+
+                    <TextView
+                        android:id="@+id/vote"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="10"
+                        android:textSize="30sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="73dp"
+                        android:text="/10"
+                        android:textSize="40sp" />
 
                     <ImageView
+                        android:id="@+id/fav_btn"
                         android:layout_width="66dp"
                         android:layout_height="match_parent"
-                        android:id="@+id/fav_btn"
-                        android:contentDescription=""
-                        android:layout_alignParentRight="true" />
+                        android:layout_alignParentRight="true"
+                        android:contentDescription="" />
                 </LinearLayout>
 
 
@@ -99,7 +105,7 @@
             </RelativeLayout>
 
 
-            </LinearLayout>
+        </LinearLayout>
 
 
         <View
@@ -129,34 +135,38 @@
 
         </View>
 
-        <ListView
-            android:textSize="30sp"
-            android:text="Trailers"
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/trailer_names"
             android:layout_width="match_parent"
             android:layout_height="72dp"
             android:drawableLeft="@android:drawable/ic_media_play"
             android:drawablePadding="5dp"
             android:drawableStart="@android:drawable/ic_media_play"
-            android:gravity="center" />
+            android:gravity="center"
+            android:text="Trailers"
+            android:textSize="30sp" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="#53b6fc"
-
-            >
+            android:background="#53b6fc">
 
         </View>
 
-        <ListView
-            android:textSize="5sp"
-            android:id="@+id/review_names"
+        <ScrollView
+            android:id="@+id/scrollViemw"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawablePadding="5dp"
-            android:gravity="center" />
+            android:layout_height="wrap_content">
 
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/review_names"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:textSize="5sp" />
+
+        </ScrollView>
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>

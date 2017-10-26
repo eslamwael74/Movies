@@ -5,15 +5,21 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.NestedScrollingChild;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +33,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -41,11 +48,26 @@ public class MovieDetailsFragment extends Fragment {
 
     private View view;
     Movie movieIntent;
+    RecyclerView listView1, listView;
+    NestedScrollView scrollView;
+    ArrayList<String> vList;
+    ArrayList<String> rList;
+
+    Parcelable reviewState, trailerState;
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.movie_details_fragment, container, false);
+
+        listView1 = (RecyclerView) view.findViewById(R.id.review_names);
+        scrollView = (NestedScrollView) view.findViewById(R.id.scrollView);
+
+        listView = (RecyclerView) view.findViewById(R.id.trailer_names);
+
+
+//        scrollView = (ScrollView) view.findViewById(R.id.review_names);
 
         if (!isTablet(getContext()))
             movieIntent = (Movie) getActivity().getIntent().getExtras().getSerializable("Mov");
@@ -72,24 +94,7 @@ public class MovieDetailsFragment extends Fragment {
                 }
             }
         });
-        SyncDb ddb = new SyncDb();
-        String urlV = new String("http://api.themoviedb.org/3/movie/" + movieIntent.getIDI() + "/videos?sort_by=popularity.desc&api_key=26f93e16f5f1dadf6c0c3c17462efcc6");
-        try {
-            URL url1 = new URL(urlV);
-            if (savedInstanceState == null)
-                ddb.execute(url1);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        SyncR ddR = new SyncR();
-        String urlR = new String("http://api.themoviedb.org/3/movie/" + movieIntent.getIDI() + "/reviews?sort_by=popularity.desc&api_key=26f93e16f5f1dadf6c0c3c17462efcc6");
-        try {
-            URL url2 = new URL(urlR);
-            if (savedInstanceState == null)
-                ddR.execute(url2);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+
         //urll = new String("http://api.themoviedb.org/3/movie/" + movieIntent.getIDI() + "/videos?sort_by=popularity.desc&api_key=26f93e16f5f1dadf6c0c3c17462efcc6");
         if (movieIntent != null) {
             //Title
@@ -118,8 +123,39 @@ public class MovieDetailsFragment extends Fragment {
             TextView overView = (TextView) view.findViewById(R.id.description);
             overView.setText(movieIntent.getDescription() + "");
 
+
         } else {
             Toast.makeText(getActivity(), "ERROR", Toast.LENGTH_LONG).show();
+        }
+
+        if (savedInstanceState == null) {
+            SyncDb ddb = new SyncDb();
+            String urlV = new String("http://api.themoviedb.org/3/movie/" + movieIntent.getIDI() + "/videos?sort_by=popularity.desc&api_key=26f93e16f5f1dadf6c0c3c17462efcc6");
+
+            try {
+                URL url1 = new URL(urlV);
+                if (savedInstanceState == null)
+                    ddb.execute(url1);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            SyncR ddR = new SyncR();
+            String urlR = new String("http://api.themoviedb.org/3/movie/" + movieIntent.getIDI() + "/reviews?sort_by=popularity.desc&api_key=26f93e16f5f1dadf6c0c3c17462efcc6");
+            try {
+                URL url2 = new URL(urlR);
+                if (savedInstanceState == null)
+                    ddR.execute(url2);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        } else {
+            movieIntent = (Movie) savedInstanceState.getSerializable("movi");
+            rList = (ArrayList<String>) savedInstanceState.getSerializable("rList");
+
+
+            updateR(rList);
+            vList = (ArrayList<String>) savedInstanceState.getSerializable("vList");
+            updateV(vList);
         }
         return view;
     }
@@ -131,20 +167,49 @@ public class MovieDetailsFragment extends Fragment {
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null) {
+            reviewState = savedInstanceState.getParcelable("review");
+            trailerState = savedInstanceState.getParcelable("trailer");
+            int[] position = savedInstanceState.getIntArray("SCROLL_POSITION");
+            if (position != null)
+                scrollView.post(() -> scrollView.scrollTo(position[0], position[1]));
+        }
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putSerializable("vList", vList);
+        outState.putSerializable("rList", rList);
+
+        outState.putParcelable("trailer", listView.getLayoutManager().onSaveInstanceState());
+        outState.putParcelable("review", listView1.getLayoutManager().onSaveInstanceState());
+
+        outState.putSerializable("movi", movieIntent);
+        outState.putIntArray("SCROLL_POSITION",
+                new int[]{scrollView.getScrollX(), scrollView.getScrollY()});
     }
 
     public void updateV(ArrayList<String> list) {
-        ListView listView = (ListView) view.findViewById(R.id.trailer_names);
-        listView.setAdapter(new TrailerAdapter(getActivity(), list));
+        TrailersAdapter trailerAdapter = new TrailersAdapter(list, getActivity());
+        listView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        listView.setAdapter(trailerAdapter);
+        if (reviewState != null)
+            listView.getLayoutManager().onRestoreInstanceState(reviewState);
 
     }
 
     public void updateR(ArrayList<String> list) {
 
-        ListView listView1 = (ListView) view.findViewById(R.id.review_names);
-        listView1.setAdapter(new ReviewsAdapter(getContext(), list));
+        ReviewAdapter reviewsAdapter = new ReviewAdapter(list, getActivity());
+        listView1.setLayoutManager(new LinearLayoutManager(getActivity()));
+        listView1.setAdapter(reviewsAdapter);
+        if (trailerState != null)
+            listView1.getLayoutManager().onRestoreInstanceState(trailerState);
+
+
     }
 
     public class SyncDb extends AsyncTask<URL, Void, ArrayList<String>> {
@@ -160,7 +225,7 @@ public class MovieDetailsFragment extends Fragment {
         @Override
         protected void onPostExecute(ArrayList<String> list) {
             super.onPostExecute(list);
-
+            vList = list;
             updateV(list);
         }
 
@@ -232,6 +297,7 @@ public class MovieDetailsFragment extends Fragment {
         @Override
         protected void onPostExecute(ArrayList<String> list) {
             super.onPostExecute(list);
+            rList = list;
             updateR(list);
         }
 

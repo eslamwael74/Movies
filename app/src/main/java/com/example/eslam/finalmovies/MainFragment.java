@@ -7,6 +7,8 @@ import android.content.res.Configuration;
 import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 
@@ -42,6 +44,13 @@ import java.util.ArrayList;
 public class MainFragment extends Fragment {
 
     static String TAG = "Movie Results";
+    GridView gridView;
+    MovieAdapter adapter;
+    Parcelable parcelable;
+    Bundle savedInstanceState;
+
+    ArrayList<Movie> moviess;
+
 
     @Nullable
     @Override
@@ -49,18 +58,35 @@ public class MainFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
+        gridView = (GridView) view.findViewById(R.id.gridview);
+
+
         if (savedInstanceState == null) {
             SyncDb syncdb = new SyncDb();
             syncdb.execute();
+            Log.d(TAG, "onCreateView:NULL " + 000+"");
+        }
+        else {
+            moviess=(ArrayList<Movie>) savedInstanceState.getSerializable("mov");
+            update(moviess);
+            parcelable = savedInstanceState.getParcelable("stateh");
+          //  gridView.onRestoreInstanceState(parcelable);
         }
         return view;
     }
 
-    @Nullable
     private void update(final ArrayList<Movie> movies) {
-        GridView gridView = (GridView) getActivity().findViewById(R.id.gridview);
-        MovieAdapter adapter = new MovieAdapter(getContext(), movies);
+
+        adapter = new MovieAdapter(getContext(), movies);
+
         gridView.setAdapter(adapter);
+
+
+        Log.d(TAG, "onCreateView:Before " + parcelable);
+        Log.d(TAG, "onCreateView:After " + parcelable);
+
+//        gridView.onRestoreInstanceState(state);
+
         if (!isTablet(getContext())) {
             gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -90,6 +116,43 @@ public class MainFragment extends Fragment {
         }
     }
 
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("mov",moviess);
+
+//        state = gridView.onSaveInstanceState();
+        outState.putParcelable("stateh", gridView.onSaveInstanceState());
+    }
+
+//    @Override
+//    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+//        if (savedInstanceState != null) {
+//            final Parcelable parcelable = savedInstanceState.getParcelable("stateh");
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    gridView.onRestoreInstanceState(parcelable);
+//                    gridView.setAdapter(adapter);
+//
+
+//        }
+//        super.onActivityCreated(savedInstanceState);
+//    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
     @Override
     public void onResume() {
 //        Toast.makeText(getActivity(),"Data Submit Successfully", Toast.LENGTH_LONG).show();
@@ -99,8 +162,10 @@ public class MainFragment extends Fragment {
             SyncDb db = new SyncDb();
             db.execute();
         }
+
         super.onResume();
     }
+
     public class SyncDb extends AsyncTask<URL, Void, ArrayList<Movie>> {
         public final String urll = "https://api.themoviedb.org/3/movie/popular?api_key=26f93e16f5f1dadf6c0c3c17462efcc6";
         public final String urllTV = "https://api.themoviedb.org/3/movie/top_rated?api_key=26f93e16f5f1dadf6c0c3c17462efcc6";
@@ -134,8 +199,8 @@ public class MainFragment extends Fragment {
         @Override
         protected void onPostExecute(ArrayList<Movie> list) {
             super.onPostExecute(list);
+            moviess = list;
             update(list);
-
         }
 
 
