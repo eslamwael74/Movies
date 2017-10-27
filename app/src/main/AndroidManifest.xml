@@ -27,5 +27,12 @@
         <activity
             android:name=".FavList"
             android:label="@string/title_activity_fav_list"></activity>
+
+        <provider
+            android:authorities="com.example.eslam.finalmovies.ContentProvider"
+            android:grantUriPermissions="true"
+            android:name=".ContentProvider" >
+        </provider>
+
     </application>
 </manifest>

@@ -24,13 +24,13 @@ public class MoviesDbHelper extends SQLiteOpenHelper {
 
         final String TABLE_CREATE = "CREATE TABLE " + MoviedbEntery.TABLE_NAME + " (" +
                 MoviedbEntery.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,  " +
-                MoviedbEntery.COLUMN_TITLE + " TEXT NOT NULL, " +
+                MoviedbEntery.COLUMN_TITLE + " TEXT, " +
                 MoviedbEntery.COLUMN_MOVIE_POPULARTY + " DOUBLE, " +
-                MoviedbEntery.COLUMN_POSTER_URL + " TEXT NOT NULL, " +
-                MoviedbEntery.DISC + " TEXT NOT NULL, " +
-                MoviedbEntery.IDI + " TEXT NOT NULL, " +
+                MoviedbEntery.COLUMN_POSTER_URL + " TEXT, " +
+                MoviedbEntery.DISC + " TEXT, " +
+                MoviedbEntery.IDI + " TEXT, " +
                 MoviedbEntery.COLUMN_RATING + " INTEGER, " +
-                MoviedbEntery.COLUMN_RELEASE_DATE + " TEXT NOT NULL);";
+                MoviedbEntery.COLUMN_RELEASE_DATE + " TEXT);";
 
         db.execSQL(TABLE_CREATE);
     }

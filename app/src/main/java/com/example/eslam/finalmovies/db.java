@@ -18,7 +18,7 @@ public class db {
     public static db getInstance() {
         if (instance == null) {
             instance = new db();
-            dpH = new MoviesDbHelper(new Apple().getana().getApplicationContext());
+            dpH = new MoviesDbHelper(Apple.getana());
             instance.open();
         }
         return instance;
@@ -68,8 +68,8 @@ public class db {
     }
 
     public ArrayList<Movie> getFav() {
-        ArrayList<Movie> movs = new ArrayList<Movie>();
-        Cursor cursor = SQ_db.query(MoviesDbHelper.MoviedbEntery.TABLE_NAME,
+        ArrayList<Movie> movs = new ArrayList<>();
+        Cursor cursor = dpH.getWritableDatabase().query(MoviesDbHelper.MoviedbEntery.TABLE_NAME,
                 null, null, null, null, null, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -83,7 +83,7 @@ public class db {
 
     public void insertMovie(Movie modle) {
         ContentValues contentValues = getContentFromFlickerModel(modle);
-        long id = SQ_db.insert(MoviesDbHelper.MoviedbEntery.TABLE_NAME, null, contentValues);
+        long id = dpH.getWritableDatabase().insert(MoviesDbHelper.MoviedbEntery.TABLE_NAME, null, contentValues);
         Cursor cursor = SQ_db.query(MoviesDbHelper.MoviedbEntery.TABLE_NAME, null
                 , MoviesDbHelper.MoviedbEntery.COLUMN_ID + " = " + id, null, null, null, null);
         //cursor.moveToFirst();

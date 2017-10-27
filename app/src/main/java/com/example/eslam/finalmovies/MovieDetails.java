@@ -60,21 +60,23 @@ public class MovieDetails extends AppCompatActivity {
 //        final Movie movieIntent = (Movie) getIntent().getExtras().getSerializable("Mov");
 
         checkNetworkAvailable();
-        if (networkStatus) {
-            Fragment f = new MovieDetailsFragment();
-            FragmentManager fm = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fm.beginTransaction();
-            fragmentTransaction.replace(R.id.details_fragment_movies, f);
-            fragmentTransaction.commit();
-        } else {
+        if(savedInstanceState == null) {
+            if (networkStatus) {
+                Fragment f = new MovieDetailsFragment();
+                FragmentManager fm = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                fragmentTransaction.replace(R.id.details_fragment_movies, f);
+                fragmentTransaction.commit();
+            } else {
 
-            Toast.makeText(this, "Your Network is Not Available", Toast.LENGTH_LONG).show();
-            Fragment f = new MovieDetailsFragment();
-            FragmentManager fm = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fm.beginTransaction();
-            fragmentTransaction.replace(R.id.details_fragment_movies, f);
-            fragmentTransaction.commit();
+                Toast.makeText(this, "Your Network is Not Available", Toast.LENGTH_LONG).show();
+                Fragment f = new MovieDetailsFragment();
+                FragmentManager fm = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                fragmentTransaction.replace(R.id.details_fragment_movies, f);
+                fragmentTransaction.commit();
 
+            }
         }
     }
 

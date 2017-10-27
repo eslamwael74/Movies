@@ -110,6 +110,8 @@ public class Movie implements Serializable {
         isFav = fav;
     }
 
+
+
     public int getIDI() {
         return IDI;
     }

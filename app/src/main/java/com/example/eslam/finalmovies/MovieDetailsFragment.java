@@ -1,13 +1,18 @@
 package com.example.eslam.finalmovies;
 
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v4.view.NestedScrollingChild;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
@@ -40,11 +45,17 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 
+import android.net.Uri;
+
+
+import static com.example.eslam.finalmovies.ContentProvider.id;
+
 /**
  * Created by eslam on 11/25/2016.
  */
 
-public class MovieDetailsFragment extends Fragment {
+public class MovieDetailsFragment extends Fragment implements
+        LoaderManager.LoaderCallbacks<Cursor> {
 
     private View view;
     Movie movieIntent;
@@ -75,26 +86,42 @@ public class MovieDetailsFragment extends Fragment {
             movieIntent = (Movie) getArguments().getSerializable("Mov");
         final ImageView imageView = (ImageView) view.findViewById(R.id.fav_btn);
         //imageView.setScaleType(ImageView.ScaleType.FIT_XY);
-        if (movieIntent.isFav())
-            imageView.setImageResource(R.drawable.un_fav);
-        else
-            imageView.setImageResource(R.drawable.fav);
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (movieIntent.isFav()) {
-                    imageView.setImageResource(R.drawable.fav);
-                    db.getInstance().removeMovie(movieIntent);
                     movieIntent.setFav(false);
+
+                    imageView.setImageResource(R.drawable.fav);
+                    Uri uri = Uri.parse(ContentProvider.CONTENT_URI + "/");
+//                    db.getInstance().removeMovie(movieIntent);
+                    getActivity().getContentResolver().delete(uri, MoviesDbHelper.MoviedbEntery.COLUMN_ID + "=" + movieIntent.getID(), null);
+
                 } else {
-                    imageView.setImageResource(R.drawable.un_fav);
-                    db.getInstance().insertMovie(movieIntent);
                     movieIntent.setFav(true);
+
+                    imageView.setImageResource(R.drawable.un_fav);
+                    ContentValues values = new ContentValues();
+                    values.put(MoviesDbHelper.MoviedbEntery.IDI, movieIntent.getIDI());
+                    values.put(MoviesDbHelper.MoviedbEntery.COLUMN_ID, movieIntent.getID());
+                    values.put(MoviesDbHelper.MoviedbEntery.COLUMN_TITLE, movieIntent.getTitle());
+                    values.put(MoviesDbHelper.MoviedbEntery.COLUMN_RATING, movieIntent.getVote());
+                    values.put(MoviesDbHelper.MoviedbEntery.COLUMN_RELEASE_DATE, movieIntent.getDate());
+                    values.put(MoviesDbHelper.MoviedbEntery.COLUMN_MOVIE_POPULARTY, movieIntent.getPopularity());
+                    values.put(MoviesDbHelper.MoviedbEntery.COLUMN_POSTER_URL, movieIntent.getPicture());
+                    values.put(MoviesDbHelper.MoviedbEntery.DISC, movieIntent.getDescription());
+                    Uri uri = Uri.parse(ContentProvider.CONTENT_URI + "/");
+                    getActivity().getContentResolver().insert(uri, values);
+                    //                    db.get    Instance().insertMovie(movieIntent);
                 }
             }
         });
-
+        if (movieIntent.isFav()) {
+            imageView.setImageResource(R.drawable.un_fav);
+        } else {
+            imageView.setImageResource(R.drawable.fav);
+        }
         //urll = new String("http://api.themoviedb.org/3/movie/" + movieIntent.getIDI() + "/videos?sort_by=popularity.desc&api_key=26f93e16f5f1dadf6c0c3c17462efcc6");
         if (movieIntent != null) {
             //Title
@@ -209,6 +236,21 @@ public class MovieDetailsFragment extends Fragment {
         if (trailerState != null)
             listView1.getLayoutManager().onRestoreInstanceState(trailerState);
 
+
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
 
     }
 
