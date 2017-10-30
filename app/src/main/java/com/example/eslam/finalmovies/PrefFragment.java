@@ -1,5 +1,6 @@
 package com.example.eslam.finalmovies;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
 
@@ -17,4 +18,5 @@ public class PrefFragment extends PreferenceFragment {
         setHasOptionsMenu(true);
 
     }
+
 }

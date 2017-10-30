@@ -1,5 +1,6 @@
 package com.example.eslam.finalmovies;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
@@ -17,6 +18,7 @@ public class SettingsActivity extends ActionBarActivity {
                 new PrefFragment()).commit();
 
     }
+
 
 
 }

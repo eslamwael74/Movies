@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -24,33 +25,57 @@ public class FavListFragment extends Fragment {
 
     GridView gridView;
     public View view;
+    ArrayList<Movie> moviess;
+    Parcelable parcelable;
+    MovieAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_fav, container, false);
         gridView = (GridView) view.findViewById(R.id.gridview_fav);
+
         if (savedInstanceState == null) {
 
+            //in getFav i retrieve it directly (using getWritableDatabase().query) please check getFav Function
             updateFav(db.getInstance().getFav());
+            moviess = db.getInstance().getFav();
+
+        } else {
+            moviess = (ArrayList<Movie>) savedInstanceState.getSerializable("mov");
+            updateFav(moviess);
+            parcelable = savedInstanceState.getParcelable("stateh");
+            //  gridView.onRestoreInstanceState(parcelable);
         }
         return view;
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        updateFav(db.getInstance().getFav());
+    public void onResume() {
+        super.onResume();
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("mov", moviess);
+
+        outState.putParcelable("stateh", gridView.onSaveInstanceState());
     }
 
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+    }
 
-    @Nullable
     public void updateFav(final ArrayList<Movie> movies) {
 
-        MovieAdapter adapter = new MovieAdapter(getActivity(), movies);
+        adapter = new MovieAdapter(getActivity(), movies);
 
         gridView.setAdapter(adapter);
-
         if (!isTablet(getActivity())) {
 
             gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

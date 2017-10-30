@@ -48,8 +48,9 @@ public class MainFragment extends Fragment {
     MovieAdapter adapter;
     Parcelable parcelable;
     Bundle savedInstanceState;
-
     ArrayList<Movie> moviess;
+
+    int hi;
 
 
     @Nullable
@@ -67,7 +68,7 @@ public class MainFragment extends Fragment {
             Log.d(TAG, "onCreateView:NULL " + 000+"");
         }
         else {
-            moviess=(ArrayList<Movie>) savedInstanceState.getSerializable("mov");
+            moviess = (ArrayList<Movie>) savedInstanceState.getSerializable("mov");
             update(moviess);
             parcelable = savedInstanceState.getParcelable("stateh");
           //  gridView.onRestoreInstanceState(parcelable);
@@ -144,7 +145,7 @@ public class MainFragment extends Fragment {
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
-
+        hi = 0;
 
     }
 
@@ -158,7 +159,7 @@ public class MainFragment extends Fragment {
 //        Toast.makeText(getActivity(),"Data Submit Successfully", Toast.LENGTH_LONG).show();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String order = prefs.getString("PREF_LIST", "popular");
-        if (!order.equals(TAG)) {
+        if (hi != 0) {
             SyncDb db = new SyncDb();
             db.execute();
         }
@@ -174,7 +175,7 @@ public class MainFragment extends Fragment {
         @Override
         protected ArrayList<Movie> doInBackground(URL... paramas) {
 
-
+            hi = 1;
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
             String order = prefs.getString("PREF_LIST", "popular");
 

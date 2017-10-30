@@ -52,6 +52,7 @@ public class FavList extends AppCompatActivity {
         }
 
     }
+
     public boolean isTablet(Context context) {
         boolean xlarge = ((context.getResources().getConfiguration().screenLayout
                 & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_XLARGE);
@@ -59,4 +60,6 @@ public class FavList extends AppCompatActivity {
                 & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE);
         return (xlarge || large);
     }
+
+
 }

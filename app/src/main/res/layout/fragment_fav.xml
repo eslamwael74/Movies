@@ -3,4 +3,4 @@
     android:id="@+id/gridview_fav"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:numColumns="auto_fit" />
+    android:numColumns="2" />
