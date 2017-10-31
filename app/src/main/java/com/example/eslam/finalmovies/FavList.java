@@ -30,27 +30,30 @@ public class FavList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fav);
 
-        if (db.getInstance().getFav().size() != 0) {
+        if (savedInstanceState == null) {
 
+            if (db.getInstance().getFav().size() != 0) {
 
-            if (!isTablet(getApplicationContext())) {
-                Fragment f = new FavListFragment();
-                FragmentManager fm = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                fragmentTransaction.add(R.id.fragment_fav_movies, f);
-                fragmentTransaction.commit();
+                if (!isTablet(getApplicationContext())) {
+                    Fragment f = new FavListFragment();
+                    FragmentManager fm = getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                    fragmentTransaction.add(R.id.fragment_fav_movies, f);
+                    fragmentTransaction.commit();
+                } else {
+                    Fragment f = new FavListFragment();
+                    FragmentManager fm = getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                    fragmentTransaction.add(R.id.fragment_fav_movies2, f);
+                    fragmentTransaction.commit();
+                }
             } else {
-                Fragment f = new FavListFragment();
-                FragmentManager fm = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                fragmentTransaction.add(R.id.fragment_fav_movies2, f);
-                fragmentTransaction.commit();
+
+                Toast.makeText(this, "No Favourite Found", Toast.LENGTH_LONG).show();
             }
         } else {
 
-            Toast.makeText(this, "No Favourite Found", Toast.LENGTH_LONG).show();
         }
-
     }
 
     public boolean isTablet(Context context) {
