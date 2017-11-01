@@ -1,6 +1,7 @@
 package com.example.eslam.finalmovies;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -14,6 +15,9 @@ public class db {
     private static MoviesDbHelper dpH;
     private SQLiteDatabase SQ_db;
     private static db instance;
+    Context context;
+    Cursor cursor;
+
 
     public static db getInstance() {
         if (instance == null) {
@@ -69,8 +73,8 @@ public class db {
 
     public ArrayList<Movie> getFav() {
         ArrayList<Movie> movs = new ArrayList<>();
-        Cursor cursor = dpH.getWritableDatabase().query(MoviesDbHelper.MoviedbEntery.TABLE_NAME,
-                null, null, null, null, null, null);
+        Cursor cursor = Apple.getana().getContentResolver().query(ContentProvider.CONTENT_URI,
+                null,null,null,null );
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             Movie Model = getMovieFromCursor(cursor);
